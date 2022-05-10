@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,8 +21,12 @@ public class Passenger
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
+    @Column(name = "address", nullable = false, length = 50)
     private String address;
+    @Column(name = "phone", nullable = false)
+    @Pattern(regexp = "(^\\(\\d{3}\\)\\s\\d{7})")
     private String phone;
 
     @CreationTimestamp

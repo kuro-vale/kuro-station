@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,16 +18,16 @@ import java.time.LocalDateTime;
 public class Passenger
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
-    @Column(name = "address", nullable = false, length = 50)
-    private String address;
-    @Column(name = "phone", nullable = false)
-    @Pattern(regexp = "(^\\(\\d{3}\\)\\s\\d{7})")
-    private String phone;
+    @Column(name = "email", nullable = false, unique = true)
+    @Email
+    private String email;
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -37,10 +37,9 @@ public class Passenger
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Passenger(String name, String address, String phone)
+    public Passenger(String name, String email)
     {
         this.name = name;
-        this.address = address;
-        this.phone = phone;
+        this.email = email;
     }
 }

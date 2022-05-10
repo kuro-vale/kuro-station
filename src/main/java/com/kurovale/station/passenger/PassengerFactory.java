@@ -11,20 +11,20 @@ import java.util.List;
 public class PassengerFactory
 {
     @Bean
-    CommandLineRunner seedDatabase(PassengerRepository passengerRepository)
+    CommandLineRunner seedDatabaseWithPassengers(PassengerRepository passengerRepository)
     {
         return args ->
         {
-            List<Passenger> passengers = Arrays.asList(new Passenger("Marnia Bavister", "50261 Kingsford Alley", "(416) 5417681"),
-                    new Passenger("Blanca Oades", "6 Hanson Crossing", "(432) 1903749"),
-                    new Passenger("Justine Cole", "31222 Hoffman Drive", "(919) 3233218"),
-                    new Passenger("Talia Elfleet", "702 Lakeland Street", "(377) 5064143"),
-                    new Passenger("Kara Jullian", "7 Jenifer Pass", "(145) 6936826"),
-                    new Passenger("Guglielma Chazier", "5881 Banding Way", "(940) 4302265"),
-                    new Passenger("Denny Lorinez", "76 Texas Crossing", "(469) 8921854"),
-                    new Passenger("Dorey Wagnerin", "923 Anzinger Pass", "(251) 8601796"),
-                    new Passenger("Raddy McCallam", "9137 Superior Junction", "(848) 8925768"),
-                    new Passenger("Elfrida Cello", "3004 Texas Plaza", "(897) 5049769"));
+            List<Passenger> passengers = Arrays.asList(new Passenger("Marnia Bavister", "bjerred0@go.com"),
+                    new Passenger("Blanca Oades", "rswanborrow1@flavors.me"),
+                    new Passenger("Justine Cole", "aseedull2@zimbio.com"),
+                    new Passenger("Talia Elfleet", "brevens3@engadget.com"),
+                    new Passenger("Kara Jullian", "cayliff4@paginegialle.it"),
+                    new Passenger("Guglielma Chazier", "ecliburn5@npr.org"),
+                    new Passenger("Denny Lorinez", "sbartholomew6@time.com"),
+                    new Passenger("Dorey Wagnerin", "fswoffer7@auda.org.au"),
+                    new Passenger("Raddy McCallam", "vblunt8@hostgator.com"),
+                    new Passenger("Elfrida Cello", "ahemerijk9@amazon.de"));
             passengerRepository.saveAll(passengers);
         };
     }

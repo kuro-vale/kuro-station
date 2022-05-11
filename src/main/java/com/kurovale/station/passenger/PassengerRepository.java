@@ -2,7 +2,12 @@ package com.kurovale.station.passenger;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface PassengerRepository extends JpaRepository<Passenger, Long>
 {
-    Passenger findByIdEquals(Long id);
+    Optional<Passenger> findByIdEqualsAndActiveIsTrue(Long id);
+
+    List<Passenger> findByActiveIsTrue();
 }

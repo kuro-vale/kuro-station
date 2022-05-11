@@ -8,6 +8,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,12 +37,16 @@ public class Travel
     private Train train;
 
     @Column(name = "departure_date", updatable = false, nullable = false)
+    @Future
     private LocalDateTime departureDate;
     @Column(name = "arrival_date", updatable = false)
+    @Future
     private LocalDateTime arrivalDate;
     @Column(name = "status", nullable = false)
     private TravelStatus status = TravelStatus.DEPARTING;
     @Column(name = "price", updatable = false, nullable = false)
+    @Min(10)
+    @Max(1000)
     private Integer price;
 
     @CreationTimestamp

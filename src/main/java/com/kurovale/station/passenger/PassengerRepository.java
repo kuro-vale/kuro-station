@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface PassengerRepository extends JpaRepository<Passenger, Long>
 {
     Optional<Passenger> findByIdEqualsAndActiveIsTrue(Long id);
-
+    Optional<Passenger> findByIdEqualsAndActiveIsFalse(Long id);
     List<Passenger> findByActiveIsTrue();
 }

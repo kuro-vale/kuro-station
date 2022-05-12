@@ -1,6 +1,8 @@
 package com.kurovale.station.passenger;
 
 import com.kurovale.station.exceptions.EntityNotFoundException;
+import com.kurovale.station.exceptions.EntityStatus;
+import com.kurovale.station.exceptions.EntityStatusException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -76,29 +78,29 @@ public class PassengerController
     }
 
     @DeleteMapping("/passengers/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id)
+    ResponseEntity<?> disable(@PathVariable Long id)
     {
         repository.findByIdEqualsAndActiveIsTrue(id)
                 .map(passenger ->
                 {
                     passenger.setActive(false);
                     return repository.save(passenger);
-                }).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
+                }).orElseThrow(() -> new EntityStatusException(EntityStatus.DISABLED, Passenger.class));
 
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/passengers/{id}/activate")
-    ResponseEntity<?> activateUser(@PathVariable Long id)
+    ResponseEntity<?> enable(@PathVariable Long id)
     {
-        Passenger activatedPassenger = repository.findById(id)
+        Passenger enabledPassenger = repository.findByIdEqualsAndActiveIsFalse(id)
                 .map(passenger ->
                 {
                     passenger.setActive(true);
                     return repository.save(passenger);
-                }).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
+                }).orElseThrow(() -> new EntityStatusException(EntityStatus.ENABLED, Passenger.class));
 
-        EntityModel<PassengerDTO> entityModel = assembler.toModel(activatedPassenger);
+        EntityModel<PassengerDTO> entityModel = assembler.toModel(enabledPassenger);
 
         return ResponseEntity.ok().body(entityModel);
     }
@@ -118,7 +120,7 @@ public class PassengerController
         } catch (ConstraintViolationException | TransactionSystemException e)
         {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
-                    .withTitle("Invalid email format")
+                    .withTitle("Invalid format")
                     .withDetail("Email format must be: foo@foo.foo"));
         }
     }

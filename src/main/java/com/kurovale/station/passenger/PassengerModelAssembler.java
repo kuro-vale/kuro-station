@@ -21,12 +21,12 @@ public class PassengerModelAssembler implements RepresentationModelAssembler<Pas
 
         return EntityModel.of(passengerDTO,
                 linkTo(methodOn(PassengerController.class).show(passenger.getId())).withSelfRel(),
-                linkTo(methodOn(PassengerController.class).index()).withRel("passengers"));
+                linkTo(methodOn(PassengerController.class).showAll()).withRel("passengers"));
     }
 
     @Override
     public CollectionModel<EntityModel<PassengerDTO>> toCollectionModel(Iterable<? extends Passenger> passengers)
     {
-        return RepresentationModelAssembler.super.toCollectionModel(passengers).add(linkTo(methodOn(PassengerController.class).index()).withSelfRel());
+        return RepresentationModelAssembler.super.toCollectionModel(passengers).add(linkTo(methodOn(PassengerController.class).showAll()).withSelfRel());
     }
 }

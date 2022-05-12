@@ -4,12 +4,13 @@ import com.kurovale.station.exceptions.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -25,28 +26,23 @@ public class PassengerController
     }
 
     @GetMapping("/passengers")
-    CollectionModel<EntityModel<PassengerDTO>> index()
+    ResponseEntity<?> showAll()
     {
         List<Passenger> passengers = repository.findByActiveIsTrue();
 
-        return assembler.toCollectionModel(passengers);
+        if (passengers.isEmpty())
+        {
+            return ResponseEntity.noContent().build();
+        }
+        CollectionModel<EntityModel<PassengerDTO>> collectionModel = assembler.toCollectionModel(passengers);
+
+        return ResponseEntity.ok().body(collectionModel);
     }
 
     @PostMapping("/passengers")
     ResponseEntity<?> store(@RequestBody Passenger passenger)
     {
-        EntityModel<PassengerDTO> entityModel;
-        try
-        {
-            entityModel = assembler.toModel(repository.save(passenger));
-        } catch (DataIntegrityViolationException e)
-        {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
-                    .withTitle("Forbidden")
-                    .withDetail("Email has been already taken"));
-        }
-
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        return checkConstrains(passenger, HttpStatus.CREATED);
     }
 
     @GetMapping("/passengers/{id}")
@@ -76,17 +72,7 @@ public class PassengerController
                     return passenger;
                 }).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
 
-        EntityModel<PassengerDTO> entityModel;
-        try
-        {
-            entityModel = assembler.toModel(repository.save(updatedPassenger));
-        } catch (DataIntegrityViolationException e)
-        {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
-                    .withTitle("Forbidden")
-                    .withDetail("Email has been already taken"));
-        }
-        return ResponseEntity.ok().body(entityModel);
+        return checkConstrains(updatedPassenger, HttpStatus.OK);
     }
 
     @DeleteMapping("/passengers/{id}")
@@ -115,5 +101,25 @@ public class PassengerController
         EntityModel<PassengerDTO> entityModel = assembler.toModel(activatedPassenger);
 
         return ResponseEntity.ok().body(entityModel);
+    }
+
+    private ResponseEntity<?> checkConstrains(Passenger passenger, HttpStatus status)
+    {
+
+        try
+        {
+            EntityModel<PassengerDTO> entityModel = assembler.toModel(repository.save(passenger));
+            return ResponseEntity.status(status).body(entityModel);
+        } catch (DataIntegrityViolationException e)
+        {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
+                    .withTitle("Forbidden")
+                    .withDetail("Email has been already taken"));
+        } catch (ConstraintViolationException | TransactionSystemException e)
+        {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
+                    .withTitle("Invalid email format")
+                    .withDetail("Email format must be: foo@foo.foo"));
+        }
     }
 }

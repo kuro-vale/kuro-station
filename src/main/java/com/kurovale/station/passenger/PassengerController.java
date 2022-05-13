@@ -4,6 +4,9 @@ import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
@@ -13,7 +16,9 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
-import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class PassengerController
@@ -30,13 +35,75 @@ public class PassengerController
     @GetMapping("/passengers")
     ResponseEntity<?> showAll()
     {
-        List<Passenger> passengers = repository.findByActiveIsTrue();
+        return showAll(1);
+    }
+
+    @GetMapping(value = "/passengers", params = {"page"})
+    ResponseEntity<?> showAll(@RequestParam(value = "page") int page)
+    {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        Page<Passenger> passengers = repository.findByActiveIsTrue(pageable);
 
         if (passengers.isEmpty())
         {
             return ResponseEntity.noContent().build();
         }
+
         CollectionModel<EntityModel<PassengerDTO>> collectionModel = assembler.toCollectionModel(passengers);
+
+        if (passengers.hasNext())
+        {
+            collectionModel.add(
+                    linkTo(methodOn(PassengerController.class).showAll(pageable.next().getPageNumber() + 1)).withRel("next"));
+        }
+        if (passengers.hasPrevious())
+        {
+            collectionModel.add(
+                    linkTo(methodOn(PassengerController.class).showAll(pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous")
+            );
+        }
+        collectionModel.add(linkTo(methodOn(PassengerController.class).showAll(page)).withSelfRel(),
+                linkTo(methodOn(PassengerController.class).showAll(1)).withRel("first"),
+                linkTo(methodOn(PassengerController.class).showAll(passengers.getTotalPages())).withRel("last"));
+
+        return ResponseEntity.ok().body(collectionModel);
+    }
+
+    @GetMapping(value = "/passengers", params = {"name"})
+    ResponseEntity<?> showAll(@RequestParam(value = "name") String name)
+    {
+        return showAll(name, 1);
+    }
+
+    @GetMapping(value = "/passengers", params = {"name", "page"})
+    ResponseEntity<?> showAll(@RequestParam(value = "name") String name, @RequestParam(value = "page", defaultValue = "1") int page)
+    {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        Page<Passenger> passengers = repository.findByNameLikeAndActiveIsTrue("%" + name + "%", pageable);
+
+        if (passengers.isEmpty())
+        {
+            return ResponseEntity.noContent().build();
+        }
+
+        CollectionModel<EntityModel<PassengerDTO>> collectionModel = assembler.toCollectionModel(passengers);
+
+        if (passengers.hasNext())
+        {
+            collectionModel.add(
+                    linkTo(methodOn(PassengerController.class).showAll(name, pageable.next().getPageNumber() + 1)).withRel("next"));
+        }
+        if (passengers.hasPrevious())
+        {
+            collectionModel.add(
+                    linkTo(methodOn(PassengerController.class).showAll(name, pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous")
+            );
+        }
+        collectionModel.add(linkTo(methodOn(PassengerController.class).showAll(name, page)).withSelfRel(),
+                linkTo(methodOn(PassengerController.class).showAll(name, 1)).withRel("first"),
+                linkTo(methodOn(PassengerController.class).showAll(name, passengers.getTotalPages())).withRel("last"));
 
         return ResponseEntity.ok().body(collectionModel);
     }

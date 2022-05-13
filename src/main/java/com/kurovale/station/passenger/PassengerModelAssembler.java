@@ -27,6 +27,6 @@ public class PassengerModelAssembler implements RepresentationModelAssembler<Pas
     @Override
     public CollectionModel<EntityModel<PassengerDTO>> toCollectionModel(Iterable<? extends Passenger> passengers)
     {
-        return RepresentationModelAssembler.super.toCollectionModel(passengers).add(linkTo(methodOn(PassengerController.class).showAll()).withSelfRel());
+        return RepresentationModelAssembler.super.toCollectionModel(passengers);
     }
 }

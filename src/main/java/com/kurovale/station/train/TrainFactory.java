@@ -13,11 +13,11 @@ public class TrainFactory
     @Bean
     CommandLineRunner seedDatabaseWithTrains(TrainRepository trainRepository)
     {
-        List<Train> trains = Arrays.asList(new Train("Ram Van B350", 1992, 40),
-                new Train("CX", 1989, 40),
-                new Train("Maxima", 2007, 30),
-                new Train("Jetta", 2008, 20),
-                new Train("Integra", 1995, 45));
+        List<Train> trains = Arrays.asList(new Train("Ram Van B350", 1992, 100),
+                new Train("CX", 1989, 200),
+                new Train("Maxima", 2007, 300),
+                new Train("Jetta", 2008, 400),
+                new Train("Integra", 1995, 500));
         return args -> trainRepository.saveAll(trains);
     }
 }

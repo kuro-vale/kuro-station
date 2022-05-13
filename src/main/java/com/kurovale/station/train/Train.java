@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,8 +24,12 @@ public class Train
     @Column(name = "model", nullable = false, updatable = false)
     private String model;
     @Column(name = "model_year", nullable = false, updatable = false)
+    @Min(1980)
+    @Max(2022)
     private Integer modelYear;
     @Column(name = "capacity", nullable = false, updatable = false)
+    @Min(100)
+    @Max(500)
     private Integer capacity;
     @Column(name = "active", nullable = false)
     private Boolean active = true;

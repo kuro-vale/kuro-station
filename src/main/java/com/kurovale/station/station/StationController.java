@@ -91,7 +91,7 @@ public class StationController
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/stations/{id}")
+    @PatchMapping("/stations/{id}/enable")
     ResponseEntity<?> enable(@PathVariable Long id)
     {
         Station enabledStation = repository.findByIdEqualsAndActiveIsFalse(id)

@@ -90,7 +90,7 @@ public class PassengerController
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/passengers/{id}/activate")
+    @PatchMapping("/passengers/{id}/enable")
     ResponseEntity<?> enable(@PathVariable Long id)
     {
         Passenger enabledPassenger = repository.findByIdEqualsAndActiveIsFalse(id)

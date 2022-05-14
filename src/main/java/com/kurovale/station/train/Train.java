@@ -1,5 +1,6 @@
 package com.kurovale.station.train;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class Train
     @Column(name = "model", nullable = false, updatable = false)
     private String model;
     @Column(name = "model_year", nullable = false, updatable = false)
+    @JsonProperty("model_year")
     @Min(1980)
     @Max(2022)
     private Integer modelYear;

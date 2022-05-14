@@ -28,6 +28,6 @@ public class StationModelAssembler implements RepresentationModelAssembler<Stati
     @Override
     public CollectionModel<EntityModel<StationDTO>> toCollectionModel(Iterable<? extends Station> stations)
     {
-        return RepresentationModelAssembler.super.toCollectionModel(stations).add(linkTo(methodOn(StationController.class).showAll()).withSelfRel());
+        return RepresentationModelAssembler.super.toCollectionModel(stations);
     }
 }

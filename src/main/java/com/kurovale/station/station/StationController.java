@@ -4,10 +4,6 @@ import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
@@ -16,9 +12,6 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class StationController
@@ -31,79 +24,6 @@ public class StationController
         this.repository = repository;
         this.assembler = assembler;
     }
-
-    @GetMapping("/stations")
-    ResponseEntity<?> showAll()
-    {
-        return showAllPaginated(1);
-    }
-
-    @GetMapping(value = "/stations", params = {"page"})
-    ResponseEntity<?> showAllPaginated(@RequestParam(value = "page") int page)
-    {
-        Pageable pageable = PageRequest.of(page - 1, 10);
-
-        Page<Station> stations = repository.findByActiveIsTrue(pageable);
-
-        if (stations.isEmpty())
-        {
-            return ResponseEntity.noContent().build();
-        }
-        CollectionModel<EntityModel<StationDTO>> collectionModel = assembler.toCollectionModel(stations);
-
-        if (stations.hasNext())
-        {
-            collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAllPaginated(pageable.next().getPageNumber() + 1)).withRel("next"));
-        }
-        if (stations.hasPrevious())
-        {
-            collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAllPaginated(pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous"));
-        }
-        collectionModel.add(linkTo(methodOn(StationController.class).showAllPaginated(page)).withSelfRel(),
-                linkTo(methodOn(StationController.class).showAllPaginated(1)).withRel("first"),
-                linkTo(methodOn(StationController.class).showAllPaginated(stations.getTotalPages())).withRel("last"));
-
-        return ResponseEntity.ok().body(collectionModel);
-    }
-
-    @GetMapping(value = "/stations", params = {"name"})
-    ResponseEntity<?> showAllByName(@RequestParam(value = "name") String name)
-    {
-        return showAllByNamePaginated(name, 1);
-    }
-
-    @GetMapping(value = "/stations", params = {"name", "page"})
-    ResponseEntity<?> showAllByNamePaginated(@RequestParam(value = "name") String name, @RequestParam(value = "page") int page)
-    {
-        Pageable pageable = PageRequest.of(page - 1, 10);
-
-        Page<Station> stations = repository.findByNameLikeAndActiveIsTrue("%" + name + "%", pageable);
-
-        if (stations.isEmpty())
-        {
-            return ResponseEntity.noContent().build();
-        }
-        CollectionModel<EntityModel<StationDTO>> collectionModel = assembler.toCollectionModel(stations);
-
-        if (stations.hasNext())
-        {
-            collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAllByNamePaginated(name, pageable.next().getPageNumber() + 1)).withRel("next"));
-        }
-        if (stations.hasPrevious())
-        {
-            collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAllByNamePaginated(name, pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous"));
-        }
-        collectionModel.add(linkTo(methodOn(StationController.class).showAllByNamePaginated(name, page)).withSelfRel(),
-                linkTo(methodOn(StationController.class).showAllByNamePaginated(name, 1)).withRel("first"),
-                linkTo(methodOn(StationController.class).showAllByNamePaginated(name, stations.getTotalPages())).withRel("last"));
-
-        return ResponseEntity.ok().body(collectionModel);
-    }
-
     @PostMapping("/stations")
     ResponseEntity<?> store(@RequestBody Station station)
     {

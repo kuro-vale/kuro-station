@@ -22,7 +22,7 @@ public class StationModelAssembler implements RepresentationModelAssembler<Stati
 
         return EntityModel.of(stationDTO,
                 linkTo(methodOn(StationController.class).show(station.getId())).withSelfRel(),
-                linkTo(methodOn(StationController.class).showAll()).withRel("stations"));
+                linkTo(methodOn(StationShowAllController.class).showAll()).withRel("stations"));
     }
 
     @Override

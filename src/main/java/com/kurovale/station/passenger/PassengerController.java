@@ -35,11 +35,11 @@ public class PassengerController
     @GetMapping("/passengers")
     ResponseEntity<?> showAll()
     {
-        return showAll(1);
+        return showAllPaginated(1);
     }
 
     @GetMapping(value = "/passengers", params = {"page"})
-    ResponseEntity<?> showAll(@RequestParam(value = "page") int page)
+    ResponseEntity<?> showAllPaginated(@RequestParam(value = "page") int page)
     {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
@@ -55,29 +55,29 @@ public class PassengerController
         if (passengers.hasNext())
         {
             collectionModel.add(
-                    linkTo(methodOn(PassengerController.class).showAll(pageable.next().getPageNumber() + 1)).withRel("next"));
+                    linkTo(methodOn(PassengerController.class).showAllPaginated(pageable.next().getPageNumber() + 1)).withRel("next"));
         }
         if (passengers.hasPrevious())
         {
             collectionModel.add(
-                    linkTo(methodOn(PassengerController.class).showAll(pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous")
+                    linkTo(methodOn(PassengerController.class).showAllPaginated(pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous")
             );
         }
-        collectionModel.add(linkTo(methodOn(PassengerController.class).showAll(page)).withSelfRel(),
-                linkTo(methodOn(PassengerController.class).showAll(1)).withRel("first"),
-                linkTo(methodOn(PassengerController.class).showAll(passengers.getTotalPages())).withRel("last"));
+        collectionModel.add(linkTo(methodOn(PassengerController.class).showAllPaginated(page)).withSelfRel(),
+                linkTo(methodOn(PassengerController.class).showAllPaginated(1)).withRel("first"),
+                linkTo(methodOn(PassengerController.class).showAllPaginated(passengers.getTotalPages())).withRel("last"));
 
         return ResponseEntity.ok().body(collectionModel);
     }
 
     @GetMapping(value = "/passengers", params = {"name"})
-    ResponseEntity<?> showAll(@RequestParam(value = "name") String name)
+    ResponseEntity<?> showAllByName(@RequestParam(value = "name") String name)
     {
-        return showAll(name, 1);
+        return showAllByNamePaginated(name, 1);
     }
 
     @GetMapping(value = "/passengers", params = {"name", "page"})
-    ResponseEntity<?> showAll(@RequestParam(value = "name") String name, @RequestParam(value = "page", defaultValue = "1") int page)
+    ResponseEntity<?> showAllByNamePaginated(@RequestParam(value = "name") String name, @RequestParam(value = "page", defaultValue = "1") int page)
     {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
@@ -93,17 +93,17 @@ public class PassengerController
         if (passengers.hasNext())
         {
             collectionModel.add(
-                    linkTo(methodOn(PassengerController.class).showAll(name, pageable.next().getPageNumber() + 1)).withRel("next"));
+                    linkTo(methodOn(PassengerController.class).showAllByNamePaginated(name, pageable.next().getPageNumber() + 1)).withRel("next"));
         }
         if (passengers.hasPrevious())
         {
             collectionModel.add(
-                    linkTo(methodOn(PassengerController.class).showAll(name, pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous")
+                    linkTo(methodOn(PassengerController.class).showAllByNamePaginated(name, pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous")
             );
         }
-        collectionModel.add(linkTo(methodOn(PassengerController.class).showAll(name, page)).withSelfRel(),
-                linkTo(methodOn(PassengerController.class).showAll(name, 1)).withRel("first"),
-                linkTo(methodOn(PassengerController.class).showAll(name, passengers.getTotalPages())).withRel("last"));
+        collectionModel.add(linkTo(methodOn(PassengerController.class).showAllByNamePaginated(name, page)).withSelfRel(),
+                linkTo(methodOn(PassengerController.class).showAllByNamePaginated(name, 1)).withRel("first"),
+                linkTo(methodOn(PassengerController.class).showAllByNamePaginated(name, passengers.getTotalPages())).withRel("last"));
 
         return ResponseEntity.ok().body(collectionModel);
     }

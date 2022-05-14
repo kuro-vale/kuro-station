@@ -35,11 +35,11 @@ public class StationController
     @GetMapping("/stations")
     ResponseEntity<?> showAll()
     {
-        return showAll(1);
+        return showAllPaginated(1);
     }
 
     @GetMapping(value = "/stations", params = {"page"})
-    ResponseEntity<?> showAll(@RequestParam(value = "page") int page)
+    ResponseEntity<?> showAllPaginated(@RequestParam(value = "page") int page)
     {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
@@ -54,28 +54,28 @@ public class StationController
         if (stations.hasNext())
         {
             collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAll(pageable.next().getPageNumber() + 1)).withRel("next"));
+                    linkTo(methodOn(StationController.class).showAllPaginated(pageable.next().getPageNumber() + 1)).withRel("next"));
         }
         if (stations.hasPrevious())
         {
             collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAll(pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous"));
+                    linkTo(methodOn(StationController.class).showAllPaginated(pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous"));
         }
-        collectionModel.add(linkTo(methodOn(StationController.class).showAll(page)).withSelfRel(),
-                linkTo(methodOn(StationController.class).showAll(1)).withRel("first"),
-                linkTo(methodOn(StationController.class).showAll(stations.getTotalPages())).withRel("last"));
+        collectionModel.add(linkTo(methodOn(StationController.class).showAllPaginated(page)).withSelfRel(),
+                linkTo(methodOn(StationController.class).showAllPaginated(1)).withRel("first"),
+                linkTo(methodOn(StationController.class).showAllPaginated(stations.getTotalPages())).withRel("last"));
 
         return ResponseEntity.ok().body(collectionModel);
     }
 
     @GetMapping(value = "/stations", params = {"name"})
-    ResponseEntity<?> showAll(@RequestParam(value = "name") String name)
+    ResponseEntity<?> showAllByName(@RequestParam(value = "name") String name)
     {
-        return showAll(name, 1);
+        return showAllByNamePaginated(name, 1);
     }
 
     @GetMapping(value = "/stations", params = {"name", "page"})
-    ResponseEntity<?> showAll(@RequestParam(value = "name") String name, @RequestParam(value = "page") int page)
+    ResponseEntity<?> showAllByNamePaginated(@RequestParam(value = "name") String name, @RequestParam(value = "page") int page)
     {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
@@ -90,16 +90,16 @@ public class StationController
         if (stations.hasNext())
         {
             collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAll(name, pageable.next().getPageNumber() + 1)).withRel("next"));
+                    linkTo(methodOn(StationController.class).showAllByNamePaginated(name, pageable.next().getPageNumber() + 1)).withRel("next"));
         }
         if (stations.hasPrevious())
         {
             collectionModel.add(
-                    linkTo(methodOn(StationController.class).showAll(name, pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous"));
+                    linkTo(methodOn(StationController.class).showAllByNamePaginated(name, pageable.previousOrFirst().getPageNumber() + 1)).withRel("previous"));
         }
-        collectionModel.add(linkTo(methodOn(StationController.class).showAll(name, page)).withSelfRel(),
-                linkTo(methodOn(StationController.class).showAll(name, 1)).withRel("first"),
-                linkTo(methodOn(StationController.class).showAll(name, stations.getTotalPages())).withRel("last"));
+        collectionModel.add(linkTo(methodOn(StationController.class).showAllByNamePaginated(name, page)).withSelfRel(),
+                linkTo(methodOn(StationController.class).showAllByNamePaginated(name, 1)).withRel("first"),
+                linkTo(methodOn(StationController.class).showAllByNamePaginated(name, stations.getTotalPages())).withRel("last"));
 
         return ResponseEntity.ok().body(collectionModel);
     }

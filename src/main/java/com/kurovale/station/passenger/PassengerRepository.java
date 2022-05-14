@@ -15,4 +15,9 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long>
     Page<Passenger> findByActiveIsTrue(Pageable pageable);
 
     Page<Passenger> findByNameLikeAndActiveIsTrue(String name, Pageable pageable);
+
+    Page<Passenger> findByEmailLikeAndActiveIsTrue(String email, Pageable pageable);
+
+    Page<Passenger> findByNameLikeAndEmailLikeAndActiveIsTrue(String name, String email, Pageable pageable);
+
 }

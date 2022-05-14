@@ -21,7 +21,7 @@ public class PassengerModelAssembler implements RepresentationModelAssembler<Pas
 
         return EntityModel.of(passengerDTO,
                 linkTo(methodOn(PassengerController.class).show(passenger.getId())).withSelfRel(),
-                linkTo(methodOn(PassengerController.class).showAll()).withRel("passengers"));
+                linkTo(methodOn(PassengerShowAllController.class).showAll()).withRel("passengers"));
     }
 
     @Override

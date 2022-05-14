@@ -1,5 +1,7 @@
 package com.kurovale.station.travel;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kurovale.station.station.Station;
 import com.kurovale.station.train.Train;
 import lombok.Getter;
@@ -25,10 +27,12 @@ public class Travel
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonProperty("departure_station")
     @JoinColumn(name = "departure_station_id", updatable = false, nullable = false)
     private Station departureStation;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonProperty("arrival_station")
     @JoinColumn(name = "arrival_station_id", updatable = false, nullable = false)
     private Station arrivalStation;
 
@@ -37,13 +41,14 @@ public class Travel
     private Train train;
 
     @Column(name = "departure_date", updatable = false, nullable = false)
+    @JsonProperty("departure_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
     @Future
     private LocalDateTime departureDate;
     @Column(name = "arrival_date", updatable = false)
-    @Future
     private LocalDateTime arrivalDate;
     @Column(name = "status", nullable = false)
-    private TravelStatus status = TravelStatus.DEPARTING;
+    private TravelStatus status = TravelStatus.PREPARING;
     @Column(name = "price", updatable = false, nullable = false)
     @Min(10)
     @Max(1000)
@@ -53,11 +58,8 @@ public class Travel
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Travel(Station departureStation, Station arrivalStation, Train train, LocalDateTime departureDate, Integer price)
+    public Travel(LocalDateTime departureDate, Integer price)
     {
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-        this.train = train;
         this.departureDate = departureDate;
         this.price = price;
     }

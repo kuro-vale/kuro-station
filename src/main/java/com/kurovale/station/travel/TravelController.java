@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -110,6 +111,7 @@ public class TravelController
                 .map(travel ->
                 {
                     travel.setStatus(TravelStatus.TRAVELING);
+                    travel.setDepartureDate(LocalDateTime.now().plusSeconds(10));
                     return travelRepository.save(travel);
                 }).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
 
@@ -126,6 +128,7 @@ public class TravelController
                 .map(travel ->
                 {
                     travel.setStatus(TravelStatus.ARRIVED);
+                    travel.setArrivalDate(LocalDateTime.now().plusSeconds(10));
                     return travelRepository.save(travel);
                 }).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
 

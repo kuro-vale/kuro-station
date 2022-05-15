@@ -40,13 +40,15 @@ public class Travel
     @JoinColumn(name = "train_id", updatable = false, nullable = false)
     private Train train;
 
-    @Column(name = "departure_date", updatable = false, nullable = false)
+    @Column(name = "departure_date", nullable = false)
     @JsonProperty("departure_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
     @Future
     private LocalDateTime departureDate;
-    @Column(name = "arrival_date", updatable = false)
+
+    @Column(name = "arrival_date", insertable = false)
     private LocalDateTime arrivalDate;
+
     @Column(name = "status", nullable = false)
     private TravelStatus status = TravelStatus.PREPARING;
     @Column(name = "price", updatable = false, nullable = false)
@@ -57,10 +59,4 @@ public class Travel
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    public Travel(LocalDateTime departureDate, Integer price)
-    {
-        this.departureDate = departureDate;
-        this.price = price;
-    }
 }

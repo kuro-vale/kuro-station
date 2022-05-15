@@ -21,6 +21,8 @@ public class TravelDTO extends RepresentationModel<TravelDTO>
     private EntityModel<StationDTO> arrivalStation;
     @JsonProperty("departure_date")
     private LocalDateTime departureDate;
+    @JsonProperty("arrival_date")
+    private LocalDateTime arrivalDate;
     private TravelStatus status;
     private Integer price;
     private EntityModel<TrainDTO> train;

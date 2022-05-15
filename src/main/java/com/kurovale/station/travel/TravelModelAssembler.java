@@ -30,6 +30,7 @@ public class TravelModelAssembler implements RepresentationModelAssembler<Travel
         travelDTO.setDepartureStation(stationModelAssembler.toModel(travel.getDepartureStation()));
         travelDTO.setArrivalStation(stationModelAssembler.toModel(travel.getArrivalStation()));
         travelDTO.setDepartureDate(travel.getDepartureDate());
+        travelDTO.setArrivalDate(travel.getArrivalDate());
         travelDTO.setStatus(travel.getStatus());
         travelDTO.setPrice(travel.getPrice());
         travelDTO.setTrain(trainModelAssembler.toModel(travel.getTrain()));

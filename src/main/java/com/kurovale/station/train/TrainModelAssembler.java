@@ -22,12 +22,12 @@ public class TrainModelAssembler implements RepresentationModelAssembler<Train, 
 
         return EntityModel.of(trainDTO,
                 linkTo(methodOn(TrainController.class).show(train.getId())).withSelfRel(),
-                linkTo(methodOn(TrainController.class).showAll()).withRel("trains"));
+                linkTo(methodOn(TrainShowAllController.class).showAll()).withRel("trains"));
     }
 
     @Override
     public CollectionModel<EntityModel<TrainDTO>> toCollectionModel(Iterable<? extends Train> trains)
     {
-        return RepresentationModelAssembler.super.toCollectionModel(trains).add(linkTo(methodOn(TrainController.class).showAll()).withSelfRel());
+        return RepresentationModelAssembler.super.toCollectionModel(trains);
     }
 }

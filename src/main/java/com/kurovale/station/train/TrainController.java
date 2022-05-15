@@ -3,7 +3,6 @@ package com.kurovale.station.train;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
-import java.util.List;
 
 @RestController
 public class TrainController
@@ -23,20 +21,6 @@ public class TrainController
     {
         this.repository = repository;
         this.assembler = assembler;
-    }
-
-    @GetMapping("/trains")
-    ResponseEntity<?> showAll()
-    {
-        List<Train> trains = repository.findByActiveIsTrue();
-
-        if (trains.isEmpty())
-        {
-            return ResponseEntity.noContent().build();
-        }
-        CollectionModel<EntityModel<TrainDTO>> collectionModel = assembler.toCollectionModel(trains);
-
-        return ResponseEntity.ok().body(collectionModel);
     }
 
     @PostMapping("/trains")

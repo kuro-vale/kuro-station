@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface TrainRepository extends JpaRepository<Train, Long>
 {
+    Train findByIdEquals(Long id);
+
     Optional<Train> findByIdEqualsAndActiveIsTrue(Long id);
 
     Optional<Train> findByIdEqualsAndActiveIsFalse(Long id);

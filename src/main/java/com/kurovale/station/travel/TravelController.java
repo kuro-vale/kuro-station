@@ -5,7 +5,6 @@ import com.kurovale.station.station.Station;
 import com.kurovale.station.station.StationRepository;
 import com.kurovale.station.train.Train;
 import com.kurovale.station.train.TrainRepository;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 public class TravelController
@@ -33,22 +31,6 @@ public class TravelController
         this.trainRepository = trainRepository;
         this.assembler = assembler;
     }
-
-    @GetMapping("/travels")
-    ResponseEntity<?> showAll()
-    {
-        List<Travel> travels = travelRepository.findByStatusIs(TravelStatus.PREPARING);
-
-        if (travels.isEmpty())
-        {
-            return ResponseEntity.noContent().build();
-        }
-
-        CollectionModel<EntityModel<TravelDTO>> collectionModel = assembler.toCollectionModel(travels);
-
-        return ResponseEntity.ok().body(collectionModel);
-    }
-
     @PostMapping("/travels")
     ResponseEntity<?> store(@RequestBody Travel travel)
     {

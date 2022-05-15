@@ -26,7 +26,7 @@ public class TrainShowAllController
     }
 
     @GetMapping("/trains")
-    ResponseEntity<?> showAll()
+    public ResponseEntity<?> showAll()
     {
         return showAllPaginated(1);
     }

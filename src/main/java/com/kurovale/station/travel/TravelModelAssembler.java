@@ -2,7 +2,6 @@ package com.kurovale.station.travel;
 
 import com.kurovale.station.station.StationModelAssembler;
 import com.kurovale.station.train.TrainModelAssembler;
-import com.kurovale.station.train.TrainShowAllController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -38,7 +37,7 @@ public class TravelModelAssembler implements RepresentationModelAssembler<Travel
 
         return EntityModel.of(travelDTO,
                 linkTo(methodOn(TravelController.class).show(travel.getId())).withSelfRel(),
-                linkTo(methodOn(TrainShowAllController.class).showAll()).withRel("travels"));
+                linkTo(methodOn(TravelShowAllController.class).showAll()).withRel("travels"));
     }
 
     @Override

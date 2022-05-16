@@ -108,8 +108,8 @@ public class TravelController
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @PatchMapping("/travels/{id}/end")
-    ResponseEntity<?> end(@PathVariable Long id)
+    @PatchMapping("/travels/{id}/finish")
+    ResponseEntity<?> finish(@PathVariable Long id)
     {
         travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
 

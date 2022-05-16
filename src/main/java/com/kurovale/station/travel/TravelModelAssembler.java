@@ -35,9 +35,21 @@ public class TravelModelAssembler implements RepresentationModelAssembler<Travel
         travelDTO.setPrice(travel.getPrice());
         travelDTO.setTrain(trainModelAssembler.toModel(travel.getTrain()));
 
-        return EntityModel.of(travelDTO,
-                linkTo(methodOn(TravelController.class).show(travel.getId())).withSelfRel(),
-                linkTo(methodOn(TravelShowAllController.class).showAll()).withRel("travels"));
+        EntityModel<TravelDTO> entityModel = EntityModel.of(travelDTO,
+            linkTo(methodOn(TravelController.class).show(travel.getId())).withSelfRel(),
+            linkTo(methodOn(TravelShowAllController.class).showAll()).withRel("travels"));
+
+        if (travel.getStatus() == TravelStatus.PREPARING)
+        {
+            entityModel.add(linkTo(methodOn(TravelController.class).start(travel.getId())).withRel("start"),
+                    linkTo(methodOn(TravelController.class).cancel(travel.getId())).withRel("cancel"));
+        }
+        if (travel.getStatus() == TravelStatus.TRAVELING)
+        {
+            entityModel.add(linkTo(methodOn(TravelController.class).finish(travel.getId())).withRel("finish"));
+        }
+
+        return entityModel;
     }
 
     @Override

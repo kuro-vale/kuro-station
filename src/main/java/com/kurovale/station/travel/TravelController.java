@@ -9,6 +9,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
@@ -31,6 +32,7 @@ public class TravelController
         this.trainRepository = trainRepository;
         this.assembler = assembler;
     }
+
     @PostMapping("/travels")
     ResponseEntity<?> store(@RequestBody Travel travel)
     {
@@ -72,13 +74,13 @@ public class TravelController
     @DeleteMapping("/travels/{id}")
     ResponseEntity<?> cancel(@PathVariable Long id)
     {
-        Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.TRAVELING, TravelStatus.ARRIVED);
+        Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.TRAVELING, TravelStatus.ARRIVED, TravelStatus.CANCELLED);
         Travel canceledTravel = travelRepository.findByIdEqualsAndStatusIsNotIn(id, statuses)
                 .map(travel ->
                 {
                     travel.setStatus(TravelStatus.CANCELLED);
                     return travelRepository.save(travel);
-                }).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
+                }).orElseThrow(() -> new TravelStatusException(statuses));
 
         EntityModel<TravelDTO> entityModel = assembler.toModel(canceledTravel);
 
@@ -88,14 +90,14 @@ public class TravelController
     @PatchMapping("/travels/{id}/start")
     ResponseEntity<?> start(@PathVariable Long id)
     {
-        Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.ARRIVED, TravelStatus.CANCELLED);
+        Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.ARRIVED, TravelStatus.CANCELLED, TravelStatus.TRAVELING);
         Travel startedTravel = travelRepository.findByIdEqualsAndStatusIsNotIn(id, statuses)
                 .map(travel ->
                 {
                     travel.setStatus(TravelStatus.TRAVELING);
                     travel.setDepartureDate(LocalDateTime.now().plusSeconds(10));
                     return travelRepository.save(travel);
-                }).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
+                }).orElseThrow(() -> new TravelStatusException(statuses));
 
         EntityModel<TravelDTO> entityModel = assembler.toModel(startedTravel);
 
@@ -105,14 +107,19 @@ public class TravelController
     @PatchMapping("/travels/{id}/end")
     ResponseEntity<?> end(@PathVariable Long id)
     {
-        Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.PREPARING, TravelStatus.CANCELLED);
+        Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.PREPARING, TravelStatus.CANCELLED, TravelStatus.ARRIVED);
         Travel endedTravel = travelRepository.findByIdEqualsAndStatusIsNotIn(id, statuses)
                 .map(travel ->
                 {
                     travel.setStatus(TravelStatus.ARRIVED);
                     travel.setArrivalDate(LocalDateTime.now().plusSeconds(10));
-                    return travelRepository.save(travel);
-                }).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
+                    return travel;
+                }).orElseThrow(() -> new TravelStatusException(statuses));
+
+        try
+        {
+            travelRepository.save(endedTravel);
+        } catch (TransactionSystemException ignored) {}
 
         EntityModel<TravelDTO> entityModel = assembler.toModel(endedTravel);
 

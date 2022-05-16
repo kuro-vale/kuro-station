@@ -56,6 +56,8 @@ public class TrainController
     @DeleteMapping("/trains/{id}")
     ResponseEntity<?> disable(@PathVariable Long id)
     {
+        repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Train.class));
+
         repository.findByIdEqualsAndActiveIsTrue(id)
                 .map(train ->
                 {
@@ -69,6 +71,8 @@ public class TrainController
     @PatchMapping("/trains/{id}/enable")
     ResponseEntity<?> enable(@PathVariable Long id)
     {
+        repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Train.class));
+
         Train enabledTrain = repository.findByIdEqualsAndActiveIsFalse(id)
                 .map(train ->
                 {

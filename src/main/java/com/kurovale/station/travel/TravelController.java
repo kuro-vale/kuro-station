@@ -74,6 +74,8 @@ public class TravelController
     @DeleteMapping("/travels/{id}")
     ResponseEntity<?> cancel(@PathVariable Long id)
     {
+        travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
+
         Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.TRAVELING, TravelStatus.ARRIVED, TravelStatus.CANCELLED);
         Travel canceledTravel = travelRepository.findByIdEqualsAndStatusIsNotIn(id, statuses)
                 .map(travel ->
@@ -90,6 +92,8 @@ public class TravelController
     @PatchMapping("/travels/{id}/start")
     ResponseEntity<?> start(@PathVariable Long id)
     {
+        travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
+
         Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.ARRIVED, TravelStatus.CANCELLED, TravelStatus.TRAVELING);
         Travel startedTravel = travelRepository.findByIdEqualsAndStatusIsNotIn(id, statuses)
                 .map(travel ->
@@ -107,6 +111,8 @@ public class TravelController
     @PatchMapping("/travels/{id}/end")
     ResponseEntity<?> end(@PathVariable Long id)
     {
+        travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
+
         Collection<TravelStatus> statuses = Arrays.asList(TravelStatus.PREPARING, TravelStatus.CANCELLED, TravelStatus.ARRIVED);
         Travel endedTravel = travelRepository.findByIdEqualsAndStatusIsNotIn(id, statuses)
                 .map(travel ->

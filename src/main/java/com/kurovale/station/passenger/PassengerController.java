@@ -64,6 +64,8 @@ public class PassengerController
     @DeleteMapping("/passengers/{id}")
     ResponseEntity<?> disable(@PathVariable Long id)
     {
+        repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
+
         repository.findByIdEqualsAndActiveIsTrue(id)
                 .map(passenger ->
                 {
@@ -77,6 +79,8 @@ public class PassengerController
     @PatchMapping("/passengers/{id}/enable")
     ResponseEntity<?> enable(@PathVariable Long id)
     {
+        repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
+
         Passenger enabledPassenger = repository.findByIdEqualsAndActiveIsFalse(id)
                 .map(passenger ->
                 {

@@ -64,6 +64,8 @@ public class StationController
     @DeleteMapping("/stations/{id}")
     ResponseEntity<?> disable(@PathVariable Long id)
     {
+        repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Station.class));
+
         repository.findByIdEqualsAndActiveIsTrue(id)
                 .map(station ->
                 {
@@ -77,6 +79,8 @@ public class StationController
     @PatchMapping("/stations/{id}/enable")
     ResponseEntity<?> enable(@PathVariable Long id)
     {
+        repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Station.class));
+
         Station enabledStation = repository.findByIdEqualsAndActiveIsFalse(id)
                 .map(station -> {
                     station.setActive(true);

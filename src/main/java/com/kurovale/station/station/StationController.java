@@ -1,5 +1,6 @@
 package com.kurovale.station.station;
 
+import com.kurovale.station.auth.Role;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.ConstraintViolationException;
 
 @RestController
@@ -25,6 +27,7 @@ public class StationController
         this.assembler = assembler;
     }
     @PostMapping("/stations")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> store(@RequestBody Station station)
     {
         return checkConstrains(station, HttpStatus.CREATED);
@@ -62,6 +65,7 @@ public class StationController
     }
 
     @DeleteMapping("/stations/{id}")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> disable(@PathVariable Long id)
     {
         repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Station.class));
@@ -77,6 +81,7 @@ public class StationController
     }
 
     @PatchMapping("/stations/{id}/enable")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> enable(@PathVariable Long id)
     {
         repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Station.class));

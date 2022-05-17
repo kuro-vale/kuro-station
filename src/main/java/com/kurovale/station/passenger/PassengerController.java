@@ -1,5 +1,6 @@
 package com.kurovale.station.passenger;
 
+import com.kurovale.station.auth.Role;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
@@ -28,6 +29,7 @@ public class PassengerController
     @PostMapping("/passengers")
     ResponseEntity<?> store(@RequestBody Passenger passenger)
     {
+        passenger.setRole(Role.PASSENGER);
         return checkConstrains(passenger, HttpStatus.CREATED);
     }
 

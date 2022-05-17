@@ -1,5 +1,6 @@
 package com.kurovale.station.travel;
 
+import com.kurovale.station.auth.Role;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.station.Station;
 import com.kurovale.station.station.StationRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -34,6 +36,7 @@ public class TravelController
     }
 
     @PostMapping("/travels")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> store(@RequestBody Travel travel)
     {
         Station departureStation = stationRepository.findByIdEqualsAndActiveIsTrue(travel.getDepartureStation().getId())
@@ -72,6 +75,7 @@ public class TravelController
     }
 
     @DeleteMapping("/travels/{id}")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> cancel(@PathVariable Long id)
     {
         travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
@@ -90,6 +94,7 @@ public class TravelController
     }
 
     @PatchMapping("/travels/{id}/start")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> start(@PathVariable Long id)
     {
         travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));
@@ -109,6 +114,7 @@ public class TravelController
     }
 
     @PatchMapping("/travels/{id}/finish")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> finish(@PathVariable Long id)
     {
         travelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Travel.class));

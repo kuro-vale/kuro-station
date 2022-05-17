@@ -1,5 +1,6 @@
 package com.kurovale.station.train;
 
+import com.kurovale.station.auth.Role;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.ConstraintViolationException;
 
 @RestController
@@ -24,6 +26,7 @@ public class TrainController
     }
 
     @PostMapping("/trains")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> store(@RequestBody Train train)
     {
         try
@@ -54,6 +57,7 @@ public class TrainController
     }
 
     @DeleteMapping("/trains/{id}")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> disable(@PathVariable Long id)
     {
         repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Train.class));
@@ -69,6 +73,7 @@ public class TrainController
     }
 
     @PatchMapping("/trains/{id}/enable")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> enable(@PathVariable Long id)
     {
         repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Train.class));

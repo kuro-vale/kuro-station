@@ -6,6 +6,7 @@ import com.kurovale.station.station.Station;
 import com.kurovale.station.station.StationRepository;
 import com.kurovale.station.train.Train;
 import com.kurovale.station.train.TrainRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
@@ -20,20 +21,13 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RestController
+@RequiredArgsConstructor
 public class TravelController
 {
     private final TravelRepository travelRepository;
     private final StationRepository stationRepository;
     private final TrainRepository trainRepository;
     private final TravelModelAssembler assembler;
-
-    public TravelController(TravelRepository travelRepository, TravelModelAssembler assembler, StationRepository stationRepository, TrainRepository trainRepository)
-    {
-        this.travelRepository = travelRepository;
-        this.stationRepository = stationRepository;
-        this.trainRepository = trainRepository;
-        this.assembler = assembler;
-    }
 
     @PostMapping("/travels")
     @RolesAllowed(Role.ADMIN)

@@ -1,5 +1,6 @@
 package com.kurovale.station.train;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,17 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController()
+@RestController
+@RequiredArgsConstructor
 public class TrainShowAllController
 {
     private final TrainRepository repository;
     private final TrainModelAssembler assembler;
-
-    public TrainShowAllController(TrainRepository repository, TrainModelAssembler assembler)
-    {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
 
     @GetMapping("/trains")
     public ResponseEntity<?> showAll()

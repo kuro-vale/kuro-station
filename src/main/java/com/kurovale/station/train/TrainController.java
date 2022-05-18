@@ -4,6 +4,7 @@ import com.kurovale.station.auth.Role;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
@@ -14,16 +15,11 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.ConstraintViolationException;
 
 @RestController
+@RequiredArgsConstructor
 public class TrainController
 {
     private final TrainRepository repository;
     private final TrainModelAssembler assembler;
-
-    public TrainController(TrainRepository repository, TrainModelAssembler assembler)
-    {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
 
     @PostMapping("/trains")
     @RolesAllowed(Role.ADMIN)

@@ -4,6 +4,7 @@ import com.kurovale.station.station.Station;
 import com.kurovale.station.station.StationRepository;
 import com.kurovale.station.train.Train;
 import com.kurovale.station.train.TrainRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,21 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController()
+@RestController
+@RequiredArgsConstructor
 public class TravelShowAllController
 {
     private final TravelRepository travelRepository;
     private final StationRepository stationRepository;
     private final TrainRepository trainRepository;
     private final TravelModelAssembler assembler;
-
-    public TravelShowAllController(TravelRepository travelRepository, StationRepository stationRepository, TrainRepository trainRepository, TravelModelAssembler assembler)
-    {
-        this.travelRepository = travelRepository;
-        this.stationRepository = stationRepository;
-        this.trainRepository = trainRepository;
-        this.assembler = assembler;
-    }
 
     @GetMapping("/travels")
     ResponseEntity<?> showAll()

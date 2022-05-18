@@ -2,6 +2,7 @@ package com.kurovale.station.travel;
 
 import com.kurovale.station.station.StationModelAssembler;
 import com.kurovale.station.train.TrainModelAssembler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -11,16 +12,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
+@RequiredArgsConstructor
 public class TravelModelAssembler implements RepresentationModelAssembler<Travel, EntityModel<TravelDTO>>
 {
     private final StationModelAssembler stationModelAssembler;
     private final TrainModelAssembler trainModelAssembler;
-
-    public TravelModelAssembler(StationModelAssembler stationModelAssembler, TrainModelAssembler trainModelAssembler)
-    {
-        this.stationModelAssembler = stationModelAssembler;
-        this.trainModelAssembler = trainModelAssembler;
-    }
 
     @Override
     public EntityModel<TravelDTO> toModel(Travel travel)

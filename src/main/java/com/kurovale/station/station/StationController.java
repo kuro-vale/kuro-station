@@ -4,6 +4,7 @@ import com.kurovale.station.auth.Role;
 import com.kurovale.station.exceptions.EntityNotFoundException;
 import com.kurovale.station.exceptions.EntityStatus;
 import com.kurovale.station.exceptions.EntityStatusException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
@@ -16,16 +17,11 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.ConstraintViolationException;
 
 @RestController
+@RequiredArgsConstructor
 public class StationController
 {
     private final StationRepository repository;
     private final StationModelAssembler assembler;
-
-    public StationController(StationRepository repository, StationModelAssembler assembler)
-    {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
     @PostMapping("/stations")
     @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> store(@RequestBody Station station)

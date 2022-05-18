@@ -1,5 +1,6 @@
 package com.kurovale.station.station;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,17 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController()
+@RestController
+@RequiredArgsConstructor
 public class StationShowAllController
 {
     private final StationRepository repository;
     private final StationModelAssembler assembler;
-
-    public StationShowAllController(StationRepository repository, StationModelAssembler assembler)
-    {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
 
     @GetMapping("/stations")
     ResponseEntity<?> showAll()

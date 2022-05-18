@@ -38,11 +38,4 @@ public class Station
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    public Station(String name, String address, String phone)
-    {
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-    }
 }

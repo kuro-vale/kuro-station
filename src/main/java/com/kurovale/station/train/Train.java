@@ -39,11 +39,4 @@ public class Train
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    public Train(String model, Integer modelYear, Integer capacity)
-    {
-        this.model = model;
-        this.modelYear = modelYear;
-        this.capacity = capacity;
-    }
 }

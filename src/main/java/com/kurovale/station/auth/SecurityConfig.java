@@ -70,10 +70,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 exceptions.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
         // Set permissions on endpoints
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/passengers**").permitAll()
-                .antMatchers(HttpMethod.GET, "/stations**").permitAll()
-                .antMatchers(HttpMethod.GET, "/trains**").permitAll()
-                .antMatchers(HttpMethod.GET, "/travels**").permitAll()
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/passengers/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/stations/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/trains/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/travels/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/passengers").permitAll()
                 .anyRequest().authenticated()

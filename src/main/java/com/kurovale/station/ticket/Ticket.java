@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class Ticket
 {
     @EmbeddedId
+    @Column(unique = true)
     private TicketPK id;
 
     @CreationTimestamp

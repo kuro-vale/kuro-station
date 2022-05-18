@@ -25,7 +25,6 @@ public class PassengerController
 {
     private final PassengerRepository repository;
     private final PassengerModelAssembler assembler;
-
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/passengers")
@@ -63,10 +62,8 @@ public class PassengerController
                     return passenger;
                 }).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
 
-        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = authentication.getToken();
-        String loggedPassengerId = jwt.getSubject().substring(0, 1);
-        if (Long.parseLong(loggedPassengerId) != updatedPassenger.getId())
+        Long loggedPassengerId = getLoggedPassengerId();
+        if (!loggedPassengerId.equals(updatedPassenger.getId()))
         {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -79,10 +76,8 @@ public class PassengerController
     {
         Passenger passengerToDelete = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
 
-        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = authentication.getToken();
-        String loggedPassengerId = jwt.getSubject().substring(0, 1);
-        if (Long.parseLong(loggedPassengerId) != passengerToDelete.getId())
+        Long loggedPassengerId = getLoggedPassengerId();
+        if (!loggedPassengerId.equals(passengerToDelete.getId()))
         {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -102,10 +97,8 @@ public class PassengerController
     {
         Passenger passengerToEnable = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Passenger.class));
 
-        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = authentication.getToken();
-        String loggedPassengerId = jwt.getSubject().substring(0, 1);
-        if (Long.parseLong(loggedPassengerId) != passengerToEnable.getId())
+        Long loggedPassengerId = getLoggedPassengerId();
+        if (!loggedPassengerId.equals(passengerToEnable.getId()))
         {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -139,5 +132,13 @@ public class PassengerController
                     .withTitle("Invalid format")
                     .withDetail("Email format must be: foo@foo.foo"));
         }
+    }
+
+    public static Long getLoggedPassengerId()
+    {
+        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = authentication.getToken();
+        String loggedPassengerId = jwt.getSubject().substring(0, 1);
+        return Long.parseLong(loggedPassengerId);
     }
 }

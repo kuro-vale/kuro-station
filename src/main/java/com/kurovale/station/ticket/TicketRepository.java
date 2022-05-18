@@ -11,4 +11,6 @@ public interface TicketRepository extends JpaRepository<Ticket, TicketPK>
     Page<Ticket> findById_Passenger_IdEquals(Long id, Pageable pageable);
 
     Optional<Ticket> findById_Passenger_IdEqualsAndId_Travel_IdEquals(Long id, Long id1);
+
+    long countById_Travel_Id(Long id);
 }

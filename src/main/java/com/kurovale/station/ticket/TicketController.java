@@ -95,6 +95,13 @@ public class TicketController
                     .withTitle("Ticket already bought")
                     .withDetail("You already bought the ticket to the travel with id: " + travel.getId()));
         }
+        // Prevent buying more tickets if the number of tickets reaches train capacity
+        if (travel.getTrain().getCapacity() <= ticketRepository.countById_Travel_Id(id))
+        {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
+                    .withTitle("Limit of passengers reach")
+                    .withDetail("You cannot buy this ticket because the travel has reached the limit of passengers"));
+        }
 
         TicketPK ticketPK = new TicketPK(loggedPassenger, travel);
 

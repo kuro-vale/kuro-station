@@ -50,6 +50,7 @@ public class StationController
     }
 
     @PutMapping("/stations/{id}")
+    @RolesAllowed(Role.ADMIN)
     ResponseEntity<?> update(@PathVariable Long id, @RequestBody Station newStation)
     {
         Station updatedStation = repository.findByIdEqualsAndActiveIsTrue(id)

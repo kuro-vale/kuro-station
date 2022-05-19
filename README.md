@@ -34,3 +34,7 @@ Run on your local machine:
 
 ```openssl rsa -pubout -in private.pem -out public_key.pem```
 
+## Admin token
+Most of the administrative endpoints (like create a station, travel, train) require of a admin token, here is one
+```eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJrdXJvLXN0b3JlLWFwaSIsInN1YiI6IjEsIGt1cm9AdmFsZS5jb20iLCJpYXQiOjE2NTI5MjE4OTQsInJvbGVzIjoiQURNSU4ifQ.ORpZiPJ1BLAvDsKqGs5wfRwX-tA-MpbT4y-BELEk3V4GwLIc6JmRNbxQYWDHZfKyDPj0iUFfnmXQib2vydqtHSjR7Z4ry3XIIYVcgTeyL9D-BDNCreK0X2uwtBMwpzwuupYbnVkrqc_3oCa0ppysB7N0u1TUzNB-MnfrjoMN3nhVll8WA5LAgr9gRwAk3dY0Tm1d3KXK5Xujre3_lGQzcjk6W0-qWl0rLNSDERvc2hKJ_pPRGco4vdKDRBUh-1colf30RYpIAp3ShRIc0phMTSVXjF3vuXVEhjKuPIrnDzfs1-kxb0XND8xOx-YZUe1wJRLK6FQUsDQIcYYqd4bahw```
+

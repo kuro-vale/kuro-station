@@ -6,6 +6,7 @@ import com.kurovale.station.passenger.Passenger;
 import com.kurovale.station.passenger.PassengerRepository;
 import com.kurovale.station.travel.Travel;
 import com.kurovale.station.travel.TravelRepository;
+import com.kurovale.station.travel.TravelStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +50,7 @@ public class TicketController
         Long loggedPassengerId = getLoggedPassengerId();
 
         // Get logged passenger tickets
-        Page<Ticket> tickets = ticketRepository.findById_Passenger_IdEquals(loggedPassengerId, pageable);
+        Page<Ticket> tickets = ticketRepository.findById_Passenger_IdEqualsAndId_Travel_StatusEquals(loggedPassengerId, TravelStatus.PREPARING, pageable);
 
         if (tickets.isEmpty())
         {
@@ -101,6 +102,13 @@ public class TicketController
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
                     .withTitle("Limit of passengers reach")
                     .withDetail("You cannot buy this ticket because the travel has reached the limit of passengers"));
+        }
+        // Prevent to buy tickets of travels that already finished or started
+        if (travel.getStatus() == TravelStatus.TRAVELING || travel.getStatus() == TravelStatus.ARRIVED)
+        {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Problem.create()
+                    .withTitle("Travel in progress")
+                    .withDetail("Cannot buy a travel that is in the status: " + travel.getStatus()));
         }
 
         TicketPK ticketPK = new TicketPK(loggedPassenger, travel);

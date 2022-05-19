@@ -76,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers(HttpMethod.GET, "/travels/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/passengers").permitAll()
+                .antMatchers(HttpMethod.GET, "/home").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer().jwt();
     }

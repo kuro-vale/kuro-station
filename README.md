@@ -10,6 +10,10 @@ See the [DOCS](https://documenter.getpostman.com/view/20195671/UyxnFQmc)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/20195671-3e694c2a-5437-4c14-a72f-922ae3a745fb?action=collection%2Ffork&collection-url=entityId%3D20195671-3e694c2a-5437-4c14-a72f-922ae3a745fb%26entityType%3Dcollection%26workspaceId%3D340d12f8-bfd8-4f84-8bc7-f3b080c24682)
 
+### Docker Image
+
+You can run this project with the [docker image](https://hub.docker.com/r/kurovale/kuro-station) of this project
+
 ## Quick Setup
 Run on your local machine:
 
@@ -35,6 +39,4 @@ Run on your local machine:
 ```openssl rsa -pubout -in private.pem -out public_key.pem```
 
 ## Admin token
-Most of the administrative endpoints (like create a station, travel, train) require of a admin token, here is one
-```eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJrdXJvLXN0b3JlLWFwaSIsInN1YiI6IjEsIGt1cm9AdmFsZS5jb20iLCJpYXQiOjE2NTI5MjE4OTQsInJvbGVzIjoiQURNSU4ifQ.ORpZiPJ1BLAvDsKqGs5wfRwX-tA-MpbT4y-BELEk3V4GwLIc6JmRNbxQYWDHZfKyDPj0iUFfnmXQib2vydqtHSjR7Z4ry3XIIYVcgTeyL9D-BDNCreK0X2uwtBMwpzwuupYbnVkrqc_3oCa0ppysB7N0u1TUzNB-MnfrjoMN3nhVll8WA5LAgr9gRwAk3dY0Tm1d3KXK5Xujre3_lGQzcjk6W0-qWl0rLNSDERvc2hKJ_pPRGco4vdKDRBUh-1colf30RYpIAp3ShRIc0phMTSVXjF3vuXVEhjKuPIrnDzfs1-kxb0XND8xOx-YZUe1wJRLK6FQUsDQIcYYqd4bahw```
-
+Most of the administrative endpoints (like create a station, travel, train) require of a admin permission, you can login as kuro@vale.com, the password is admin123 (if you seed the database with up.sql)
